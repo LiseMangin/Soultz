@@ -1,0 +1,29 @@
+from obspy.clients.arclink import Client
+from obspy.core import UTCDateTime
+from obspy import read
+import numpy as np
+
+data=Client(host='renass-fw',port=18001,user='lise_mangin')
+#data=Client('RESIF')
+
+t1=UTCDateTime("2017-04-09T08:00:00")
+t2=UTCDateTime("2017-04-09T09:00:00")
+
+net = "FR"
+sta = "SZBH"
+loc = "0?"
+chan = "H[HN]?"
+
+#Pour les waveforms
+streams = data.get_waveforms(net, station=sta, location=loc, channel=chan, starttime=t1, endtime=t2, route=False)
+
+#Pour les filtres
+
+streams.filter('highpass', freq=0.1, corners=2, zerophase=True)
+
+#streams.taper(0.1)
+
+subplots_adjust_bottom
+streams.plot(equal_scale=False, color='brown')
+
+streams.write("stream.mseed", format='MSEED')
